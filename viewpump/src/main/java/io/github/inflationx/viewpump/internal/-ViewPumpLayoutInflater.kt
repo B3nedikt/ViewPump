@@ -32,8 +32,14 @@ internal class `-ViewPumpLayoutInflater`(
 
   private var storeLayoutResId = ViewPump.get().isStoreLayoutResId
 
+  internal var overwriteContext: Context = newContext
+
   init {
     setUpLayoutFactories(cloned)
+  }
+
+  override fun getContext(): Context {
+    return overwriteContext
   }
 
   override fun cloneInContext(newContext: Context): LayoutInflater {

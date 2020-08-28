@@ -1,6 +1,7 @@
 package io.github.inflationx.viewpump
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.MainThread
 import io.github.inflationx.viewpump.Interceptor.Chain
@@ -8,6 +9,7 @@ import io.github.inflationx.viewpump.ViewPump.Builder
 import io.github.inflationx.viewpump.internal.`-FallbackViewCreationInterceptor`
 import io.github.inflationx.viewpump.internal.`-InterceptorChain`
 import io.github.inflationx.viewpump.internal.`-ReflectiveFallbackViewCreator`
+import io.github.inflationx.viewpump.internal.`-ViewPumpLayoutInflater`
 
 class ViewPump private constructor(
     /** List of interceptors.  */
@@ -178,6 +180,12 @@ class ViewPump private constructor(
               fallbackViewCreator = reflectiveFallbackViewCreator
           ))
           .view
+    }
+
+    @JvmStatic
+    fun updateContext(context: Context){
+      val inflater = (LayoutInflater.from(context) as? `-ViewPumpLayoutInflater`)
+      inflater?.overwriteContext = context
     }
 
     @JvmStatic
