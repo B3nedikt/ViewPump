@@ -183,7 +183,7 @@ class ViewPump private constructor(
     }
 
     @JvmStatic
-    fun updateContext(context: Context){
+    fun setOverwriteContext(context: Context){
       val inflater = (LayoutInflater.from(context) as? `-ViewPumpLayoutInflater`)
       inflater?.overwriteContext = context
     }
