@@ -81,7 +81,7 @@ internal class `-ViewPumpLayoutInflater`(
         }
     }
 
-    override fun setFactory(factory: LayoutInflater.Factory) {
+    override fun setFactory(factory: Factory) {
         // Only set our factory and wrap calls to the Factory trying to be set!
         if (factory !is WrapperFactory) {
             super.setFactory(
@@ -91,7 +91,7 @@ internal class `-ViewPumpLayoutInflater`(
         }
     }
 
-    override fun setFactory2(factory2: LayoutInflater.Factory2) {
+    override fun setFactory2(factory2: Factory2) {
         // Only set our factory and wrap calls to the Factory2 trying to be set!
         if (factory2 !is WrapperFactory2) {
             // LayoutInflaterCompat.setFactory(this, new WrapperFactory2(factory2, mViewPumpFactory));
@@ -108,7 +108,7 @@ internal class `-ViewPumpLayoutInflater`(
         // Reflection (Or Old Device) skip.
         if (!ViewPump.get().isReflection) return
         // Skip if not attached to an activity.
-        if (context !is LayoutInflater.Factory2) {
+        if (context !is Factory2) {
             setPrivateFactory = true
             return
         }
@@ -316,11 +316,11 @@ internal class `-ViewPumpLayoutInflater`(
     /**
      * Factory 1 is the first port of call for LayoutInflation
      */
-    private class WrapperFactory(factory: LayoutInflater.Factory) : LayoutInflater.Factory {
+    private class WrapperFactory(factory: Factory) : Factory {
 
         private val viewCreator: FallbackViewCreator = WrapperFactoryViewCreator(factory)
 
-        override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
+        override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
             return ViewPump.get()
                     .inflate(InflateRequest(
                             name = name,
@@ -333,7 +333,7 @@ internal class `-ViewPumpLayoutInflater`(
     }
 
     private class WrapperFactoryViewCreator(
-            private val factory: LayoutInflater.Factory
+            private val factory: Factory
     ) : FallbackViewCreator {
 
         override fun onCreateView(
@@ -342,17 +342,17 @@ internal class `-ViewPumpLayoutInflater`(
                 context: Context,
                 attrs: AttributeSet?
         ): View? {
-            return factory.onCreateView(name, context, attrs)
+            return factory.onCreateView(name, context, attrs!!)
         }
     }
 
     /**
      * Factory 2 is the second port of call for LayoutInflation
      */
-    private open class WrapperFactory2(factory2: LayoutInflater.Factory2) : LayoutInflater.Factory2 {
+    private open class WrapperFactory2(factory2: Factory2) : Factory2 {
         private val viewCreator = WrapperFactory2ViewCreator(factory2)
 
-        override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
+        override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
             return onCreateView(null, name, context, attrs)
         }
 
@@ -360,7 +360,7 @@ internal class `-ViewPumpLayoutInflater`(
                 parent: View?,
                 name: String,
                 context: Context,
-                attrs: AttributeSet?
+                attrs: AttributeSet
         ): View? {
             return ViewPump.get()
                     .inflate(InflateRequest(
@@ -375,7 +375,7 @@ internal class `-ViewPumpLayoutInflater`(
     }
 
     private open class WrapperFactory2ViewCreator(
-            protected val factory2: LayoutInflater.Factory2) : FallbackViewCreator {
+            protected val factory2: Factory2) : FallbackViewCreator {
 
         override fun onCreateView(
                 parent: View?,
@@ -383,7 +383,7 @@ internal class `-ViewPumpLayoutInflater`(
                 context: Context,
                 attrs: AttributeSet?
         ): View? {
-            return factory2.onCreateView(parent, name, context, attrs)
+            return factory2.onCreateView(parent, name, context, attrs!!)
         }
     }
 
@@ -391,7 +391,7 @@ internal class `-ViewPumpLayoutInflater`(
      * Private factory is step three for Activity Inflation, this is what is attached to the Activity
      */
     private class PrivateWrapperFactory2(
-            factory2: LayoutInflater.Factory2,
+            factory2: Factory2,
             inflater: `-ViewPumpLayoutInflater`
     ) : WrapperFactory2(factory2) {
 
@@ -401,7 +401,7 @@ internal class `-ViewPumpLayoutInflater`(
                 parent: View?,
                 name: String,
                 context: Context,
-                attrs: AttributeSet?
+                attrs: AttributeSet
         ): View? {
             return ViewPump.get()
                     .inflate(InflateRequest(
@@ -416,7 +416,7 @@ internal class `-ViewPumpLayoutInflater`(
     }
 
     private class PrivateWrapperFactory2ViewCreator(
-            factory2: LayoutInflater.Factory2,
+            factory2: Factory2,
             private val inflater: `-ViewPumpLayoutInflater`
     ) : WrapperFactory2ViewCreator(factory2), FallbackViewCreator {
 
@@ -427,7 +427,7 @@ internal class `-ViewPumpLayoutInflater`(
                 attrs: AttributeSet?
         ): View? {
             return inflater.createCustomViewInternal(
-                    factory2.onCreateView(parent, name, context, attrs), name, context, attrs)
+                    factory2.onCreateView(parent, name, context, attrs!!), name, context, attrs)
         }
     }
 
