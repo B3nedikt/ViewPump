@@ -1,5 +1,4 @@
-ViewPump
-========
+# ViewPump
 
 View inflation you can intercept.
 
@@ -13,7 +12,7 @@ Include the dependency [Download (.aar)](http://search.maven.org/remotecontent?f
 
 ```groovy
 dependencies {
-    implementation 'io.github.inflationx:viewpump:2.0.3'
+    implementation 'io.github.inflationx:viewpump:2.0.4'
 }
 ```
 
@@ -23,17 +22,18 @@ Define your interceptor. Below is a somewhat arbitrary example of a post-inflati
 
 ```java
 public class TextUpdatingInterceptor implements Interceptor {
-    @Override
-    public InflateResult intercept(Chain chain) {
-        InflateResult result = chain.proceed(chain.request());
-        if (result.view() instanceof TextView) {
-            // Do something to result.view()
-            // You have access to result.context() and result.attrs()
-            TextView textView = (TextView) result.view();
-            textView.setText("[Prefix] " + textView.getText());
-        }
-        return result;
+
+  @Override
+  public InflateResult intercept(Chain chain) {
+    InflateResult result = chain.proceed(chain.request());
+    if (result.view() instanceof TextView) {
+      // Do something to result.view()
+      // You have access to result.context() and result.attrs()
+      TextView textView = (TextView) result.view();
+      textView.setText("[Prefix] " + textView.getText());
     }
+    return result;
+  }
 }
 ```
 
@@ -41,21 +41,26 @@ Below is an example of a pre-inflation interceptor that returns a CustomTextView
 
 ```java
 public class CustomTextViewInterceptor implements Interceptor {
-    @Override
-    public InflateResult intercept(Chain chain) {
-        InflateRequest request = chain.request();
-        if (request.name().endsWith("TextView")) {
-            CustomTextView view = new CustomTextView(request.context(), request.attrs());
-            return InflateResult.builder()
-                    .view(view)
-                    .name(view.getClass().getName())
-                    .context(request.context())
-                    .attrs(request.attrs())
-                    .build();
-        } else {
-            return chain.proceed(request);
-        }
+
+  @Override
+  public InflateResult intercept(Chain chain) {
+    InflateRequest request = chain.request();
+    if (request.name().endsWith("TextView")) {
+      CustomTextView view = new CustomTextView(
+        request.context(),
+        request.attrs()
+      );
+      return InflateResult
+        .builder()
+        .view(view)
+        .name(view.getClass().getName())
+        .context(request.context())
+        .attrs(request.attrs())
+        .build();
+    } else {
+      return chain.proceed(request);
     }
+  }
 }
 ```
 
