@@ -1,0 +1,51 @@
+apply plugin: 'maven-publish'
+
+def pomConfig = {
+    licenses {
+        license {
+            name licenseName
+            url licenseUrl
+        }
+    }
+    developers {
+        developer {
+            id developerId
+            name developerName
+            email developerEmail
+            organization organization
+            organizationUrl siteUrl
+        }
+    }
+    scm {
+        connection gitUrl
+        developerConnection gitUrl
+        url siteUrl
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+
+                from components.release
+
+                groupId publishedGroupId
+                artifactId artifactId
+                version = libraryVersion
+
+                artifact sourcesJar
+                artifact javadocJar
+
+                pom.withXml {
+                    def root = asNode()
+                    root.appendNode('description', libraryDescription)
+                    root.appendNode('name', libraryName)
+                    root.appendNode('url', siteUrl)
+                    root.children().last() + pomConfig
+                }
+            }
+        }
+    }
+}

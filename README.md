@@ -1,19 +1,17 @@
-ViewPump
-========
+# ViewPump 3.0.0
 
 View inflation you can intercept.
-
 ViewPump installs a custom LayoutInflater via a ContextThemeWrapper and provides an API of pre/post-inflation interceptors.
 
 ## Getting started
 
 ### Dependency
 
-Include the dependency [Download (.aar)](http://search.maven.org/remotecontent?filepath=io/github/inflationx/viewpump/2.0.3/viewpump-2.0.3.aar) :
+Include the dependency:
 
 ```groovy
 dependencies {
-    implementation 'io.github.inflationx:viewpump:2.0.3'
+    implementation 'io.github.inflationx:viewpump:3.0.0'
 }
 ```
 
@@ -23,17 +21,18 @@ Define your interceptor. Below is a somewhat arbitrary example of a post-inflati
 
 ```java
 public class TextUpdatingInterceptor implements Interceptor {
-    @Override
-    public InflateResult intercept(Chain chain) {
-        InflateResult result = chain.proceed(chain.request());
-        if (result.view() instanceof TextView) {
-            // Do something to result.view()
-            // You have access to result.context() and result.attrs()
-            TextView textView = (TextView) result.view();
-            textView.setText("[Prefix] " + textView.getText());
-        }
-        return result;
+
+  @Override
+  public InflateResult intercept(Chain chain) {
+    InflateResult result = chain.proceed(chain.request());
+    if (result.view() instanceof TextView) {
+      // Do something to result.view()
+      // You have access to result.context() and result.attrs()
+      TextView textView = (TextView) result.view();
+      textView.setText("[Prefix] " + textView.getText());
     }
+    return result;
+  }
 }
 ```
 
@@ -41,21 +40,26 @@ Below is an example of a pre-inflation interceptor that returns a CustomTextView
 
 ```java
 public class CustomTextViewInterceptor implements Interceptor {
-    @Override
-    public InflateResult intercept(Chain chain) {
-        InflateRequest request = chain.request();
-        if (request.name().endsWith("TextView")) {
-            CustomTextView view = new CustomTextView(request.context(), request.attrs());
-            return InflateResult.builder()
-                    .view(view)
-                    .name(view.getClass().getName())
-                    .context(request.context())
-                    .attrs(request.attrs())
-                    .build();
-        } else {
-            return chain.proceed(request);
-        }
+
+  @Override
+  public InflateResult intercept(Chain chain) {
+    InflateRequest request = chain.request();
+    if (request.name().endsWith("TextView")) {
+      CustomTextView view = new CustomTextView(
+        request.context(),
+        request.attrs()
+      );
+      return InflateResult
+        .builder()
+        .view(view)
+        .name(view.getClass().getName())
+        .context(request.context())
+        .attrs(request.attrs())
+        .build();
+    } else {
+      return chain.proceed(request);
     }
+  }
 }
 ```
 
@@ -92,14 +96,16 @@ _You're good to go!_
 
 To see more ideas for potential use cases, check out the [Recipes](https://github.com/InflationX/ViewPump/wiki/Recipes) wiki page.
 
-# Collaborators
+## Collaborators
+
+This library was originally created by
 
 - [@jbarr21](https://github.com/jbarr21)
 - [@chrisjenx](https://github.com/chrisjenx)
 
-# Licence
+## Licence
 
-    Copyright 2017 InflationX
+    Copyright 2017 InflationX & Contributors
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

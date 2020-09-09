@@ -1,0 +1,25 @@
+ext {
+    bintrayRepo = 'viewpump'
+    bintrayName = 'viewpump'
+
+    publishedGroupId = 'dev.b3nedikt.viewpump'
+    artifactId = 'viewpump'
+    libraryVersion = '2.0.4'
+
+    libraryName = 'ViewPump'
+    libraryDescription = 'View inflation you can intercept. ViewPump installs a custom' +
+            ' LayoutInflater via a ContextThemeWrapper and provides an API of pre/post-inflation interceptors..'
+    siteUrl = 'https://github.com/B3nedikt/viewpump'
+    gitUrl = 'https://github.com/B3nedikt/viewpump.git'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+    developerId = 'b3nedikt'
+    developerName = 'Benedikt Löbbecke'
+    developerEmail = 'mail@b3nedikt.dev'
+    organization = 'b3nedikt.dev'
+}
+
+apply from: 'install.gradle'
+apply from: 'bintray.gradle'

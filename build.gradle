@@ -16,16 +16,12 @@ buildscript {
     }
     mavenCentral()
     jcenter()
-    maven {
-      // For maven publish plugin until 0.9.0 is released
-      url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:4.0.1'
     classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0'
-    classpath 'org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18'
-    classpath 'com.vanniktech:gradle-maven-publish-plugin:0.9.0'
+    classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.0-rc'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
   }
 }
 

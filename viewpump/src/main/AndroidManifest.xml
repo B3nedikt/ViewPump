@@ -1,4 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.inflationx.viewpump">
+    package="dev.b3nedikt.viewpump">
     <application />
 </manifest>
