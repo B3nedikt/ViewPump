@@ -3,7 +3,7 @@ ext {
     bintrayName = 'viewpump'
 
     publishedGroupId = 'dev.b3nedikt.viewpump'
-    artifact = 'viewpump'
+    artifactId = 'viewpump'
     libraryVersion = '2.0.4'
 
     libraryName = 'ViewPump'

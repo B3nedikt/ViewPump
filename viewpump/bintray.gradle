@@ -58,9 +58,9 @@ String localProperty(propertyName) {
 bintray {
     user = localProperty("bintrayUser")
     key = localProperty("bintrayApiKey")
+
     publications = ['release']
 
-    configurations = ['archives']
     pkg {
         repo = bintrayRepo
         name = bintrayName

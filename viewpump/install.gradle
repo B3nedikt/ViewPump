@@ -32,8 +32,11 @@ afterEvaluate {
                 from components.release
 
                 groupId publishedGroupId
-                artifactId artifact
+                artifactId artifactId
                 version = libraryVersion
+
+                artifact sourcesJar
+                artifact javadocJar
 
                 pom.withXml {
                     def root = asNode()
