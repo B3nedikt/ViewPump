@@ -11,7 +11,7 @@ Include the dependency:
 
 ```groovy
 dependencies {
-    implementation 'io.github.inflationx:viewpump:3.0.0'
+    implementation 'dev.b3nedikt.viewpump:viewpump:3.0.0'
 }
 ```
 
@@ -98,7 +98,7 @@ To see more ideas for potential use cases, check out the [Recipes](https://githu
 
 ## Collaborators
 
-This library was originally created by
+This library was originally created by:
 
 - [@jbarr21](https://github.com/jbarr21)
 - [@chrisjenx](https://github.com/chrisjenx)
