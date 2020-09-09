@@ -1,0 +1,36 @@
+package dev.b3nedikt.viewpump.sample;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import dev.b3nedikt.viewpump.ViewPumpContextWrapper;
+import io.github.inflationx.viewpump.sample.R;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.app_name);
+    }
+
+    /*
+        Uncomment if you disable PrivateFactory injection. See ViewPumpConfig#setPrivateFactoryInjectionEnabled(boolean)
+     */
+//    @Override
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public View onCreateView(View parent, String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+//        return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
+//    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+    }
+}
