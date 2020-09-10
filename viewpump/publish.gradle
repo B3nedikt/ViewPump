@@ -4,7 +4,7 @@ ext {
 
     publishedGroupId = 'dev.b3nedikt.viewpump'
     artifactId = 'viewpump'
-    libraryVersion = '2.0.4'
+    libraryVersion = '3.0.0'
 
     libraryName = 'ViewPump'
     libraryDescription = 'View inflation you can intercept. ViewPump installs a custom' +
