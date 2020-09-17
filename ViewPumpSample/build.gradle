@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1"
     }
@@ -39,6 +39,6 @@ dependencies {
     implementation project(':viewpump')
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.4'
 }

@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BuildCompat
 import dev.b3nedikt.viewpump.FallbackViewCreator
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.R.id
@@ -21,8 +20,6 @@ internal class `-ViewPumpLayoutInflater`(
     newContext: Context,
     cloned: Boolean
 ) : LayoutInflater(original, newContext), `-ViewPumpActivityFactory` {
-
-  private val IS_AT_LEAST_Q = Build.VERSION.SDK_INT > Build.VERSION_CODES.P || BuildCompat.isAtLeastQ()
 
   private val nameAndAttrsViewCreator: FallbackViewCreator = NameAndAttrsViewCreator(this)
   private val parentAndNameAndAttrsViewCreator: FallbackViewCreator = ParentAndNameAndAttrsViewCreator(this)
@@ -95,7 +92,7 @@ internal class `-ViewPumpLayoutInflater`(
     if (factory2 !is WrapperFactory2) {
       // LayoutInflaterCompat.setFactory(this, new WrapperFactory2(factory2, mViewPumpFactory));
       super.setFactory2(
-          WrapperFactory2(factory2))
+          WrapperFactory2(factory2) { overwriteContext })
     } else {
       super.setFactory2(factory2)
     }
@@ -115,7 +112,7 @@ internal class `-ViewPumpLayoutInflater`(
     // TODO: we need to get this and wrap it if something has already set this
     val setPrivateFactoryMethod = LayoutInflater::class.java.getAccessibleMethod("setPrivateFactory")
 
-    setPrivateFactoryMethod.invokeMethod(this, PrivateWrapperFactory2(context as Factory2, this))
+    setPrivateFactoryMethod.invokeMethod(this, PrivateWrapperFactory2(context as Factory2, this) { overwriteContext })
     setPrivateFactory = true
   }
 
@@ -348,8 +345,11 @@ internal class `-ViewPumpLayoutInflater`(
   /**
    * Factory 2 is the second port of call for LayoutInflation
    */
-  private open class WrapperFactory2(factory2: Factory2) : Factory2 {
-    private val viewCreator = WrapperFactory2ViewCreator(factory2)
+  private open class WrapperFactory2(
+      factory2: Factory2,
+      contextProvider: () -> Context?
+  ) : Factory2 {
+    private val viewCreator = WrapperFactory2ViewCreator(factory2, contextProvider)
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
       return onCreateView(null, name, context, attrs)
@@ -374,7 +374,9 @@ internal class `-ViewPumpLayoutInflater`(
   }
 
   private open class WrapperFactory2ViewCreator(
-      protected val factory2: Factory2) : FallbackViewCreator {
+      protected val factory2: Factory2,
+      private val contextProvider: () -> Context?
+  ) : FallbackViewCreator {
 
     override fun onCreateView(
         parent: View?,
@@ -382,7 +384,10 @@ internal class `-ViewPumpLayoutInflater`(
         context: Context,
         attrs: AttributeSet?
     ): View? {
-      return factory2.onCreateView(parent, name, context, attrs!!)
+
+      val newContext = contextProvider.invoke() ?: context
+
+      return factory2.onCreateView(parent, name, newContext, attrs!!)
     }
   }
 
@@ -391,10 +396,11 @@ internal class `-ViewPumpLayoutInflater`(
    */
   private class PrivateWrapperFactory2(
       factory2: Factory2,
-      inflater: `-ViewPumpLayoutInflater`
-  ) : WrapperFactory2(factory2) {
+      inflater: `-ViewPumpLayoutInflater`,
+      private val contextProvider: () -> Context?
+  ) : WrapperFactory2(factory2, contextProvider) {
 
-    private val viewCreator = PrivateWrapperFactory2ViewCreator(factory2, inflater)
+    private val viewCreator = PrivateWrapperFactory2ViewCreator(factory2, inflater, contextProvider)
 
     override fun onCreateView(
         parent: View?,
@@ -402,10 +408,13 @@ internal class `-ViewPumpLayoutInflater`(
         context: Context,
         attrs: AttributeSet
     ): View? {
+
+      val newContext = contextProvider.invoke() ?: context
+
       return ViewPump.get()
           .inflate(InflateRequest(
               name = name,
-              context = context,
+              context = newContext,
               attrs = attrs,
               parent = parent,
               fallbackViewCreator = viewCreator
@@ -416,8 +425,9 @@ internal class `-ViewPumpLayoutInflater`(
 
   private class PrivateWrapperFactory2ViewCreator(
       factory2: Factory2,
-      private val inflater: `-ViewPumpLayoutInflater`
-  ) : WrapperFactory2ViewCreator(factory2), FallbackViewCreator {
+      private val inflater: `-ViewPumpLayoutInflater`,
+      private val contextProvider: () -> Context?
+  ) : WrapperFactory2ViewCreator(factory2, contextProvider), FallbackViewCreator {
 
     override fun onCreateView(
         parent: View?,
@@ -425,18 +435,23 @@ internal class `-ViewPumpLayoutInflater`(
         context: Context,
         attrs: AttributeSet?
     ): View? {
+
+      val newContext = contextProvider.invoke() ?: context
+
       return inflater.createCustomViewInternal(
-          factory2.onCreateView(parent, name, context, attrs!!), name, context, attrs)
+          factory2.onCreateView(parent, name, newContext, attrs!!), name, context, attrs)
     }
   }
 
   companion object {
+    private val IS_AT_LEAST_Q = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
     private val CLASS_PREFIX_LIST = setOf("android.widget.", "android.webkit.")
+
     private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
       requireNotNull(LayoutInflater::class.java.getDeclaredField("mConstructorArgs")) {
         "No constructor arguments field found in LayoutInflater!"
       }.apply { isAccessible = true }
     }
   }
-
 }
