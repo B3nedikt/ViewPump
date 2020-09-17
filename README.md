@@ -1,4 +1,4 @@
-# ViewPump 3.0.0
+# ViewPump 3.0.1
 
 View inflation you can intercept.
 ViewPump installs a custom LayoutInflater via a ContextThemeWrapper and provides an API of pre/post-inflation interceptors.
@@ -11,7 +11,7 @@ Include the dependency:
 
 ```groovy
 dependencies {
-    implementation 'dev.b3nedikt.viewpump:viewpump:3.0.0'
+    implementation 'dev.b3nedikt.viewpump:viewpump:3.0.1'
 }
 ```
 
