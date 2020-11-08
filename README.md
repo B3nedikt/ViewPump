@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-For a practical example see my library
+For practical examples see my libraries [Restring](https://github.com/B3nedikt/restring) or [AppLocale](https://github.com/B3nedikt/AppLocale).
 
 ## Collaborators
 
