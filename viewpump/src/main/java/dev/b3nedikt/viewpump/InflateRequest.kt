@@ -4,74 +4,20 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 
+/**
+ * A request to inflate a view
+ *
+ * @param name Tag name to be inflated.
+ * @param context The context the view is being created in .
+ * @param attrs Inflation attributes as specified in XML file.
+ * @param parent The parent that the created view will be placed in.
+ * @param fallbackViewCreator Creates a new view as it would get created without interception
+ * if the result of this request does not create a view
+ */
 data class InflateRequest(
-    @get:JvmName("name")
     val name: String,
-    @get:JvmName("context")
     val context: Context,
-    @get:JvmName("attrs")
     val attrs: AttributeSet? = null,
-    @get:JvmName("parent")
     val parent: View? = null,
-    @get:JvmName("fallbackViewCreator")
-    val fallbackViewCreator: FallbackViewCreator
-) {
-
-  fun toBuilder(): Builder {
-    return Builder(this)
-  }
-
-  class Builder {
-    private var name: String? = null
-    private var context: Context? = null
-    private var attrs: AttributeSet? = null
-    private var parent: View? = null
-    private var fallbackViewCreator: FallbackViewCreator? = null
-
-    internal constructor()
-
-    internal constructor(request: InflateRequest) {
-      this.name = request.name
-      this.context = request.context
-      this.attrs = request.attrs
-      this.parent = request.parent
-      this.fallbackViewCreator = request.fallbackViewCreator
-    }
-
-    fun name(name: String) = apply {
-      this.name = name
-    }
-
-    fun context(context: Context) = apply {
-      this.context = context
-    }
-
-    fun attrs(attrs: AttributeSet?) = apply {
-      this.attrs = attrs
-    }
-
-    fun parent(parent: View?) = apply {
-      this.parent = parent
-    }
-
-    fun fallbackViewCreator(fallbackViewCreator: FallbackViewCreator) = apply {
-      this.fallbackViewCreator = fallbackViewCreator
-    }
-
-    fun build() =
-        InflateRequest(name = name ?: throw IllegalStateException("name == null"),
-            context = context ?: throw IllegalStateException("context == null"),
-            attrs = attrs,
-            parent = parent,
-            fallbackViewCreator = fallbackViewCreator ?: throw IllegalStateException("fallbackViewCreator == null")
-        )
-  }
-
-  companion object {
-
-    @JvmStatic
-    fun builder(): Builder {
-      return Builder()
-    }
-  }
-}
+    val fallbackViewCreator: () -> View?
+)

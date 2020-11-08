@@ -12,19 +12,9 @@ android {
         minSdkVersion 14
         targetSdkVersion 30
     }
-    lintOptions {
-        // we don't always want to use the latest version of the support library
-        disable 'GradleDependency'
-        textOutput 'stdout'
-        textReport System.getenv('CI') == 'true'
-    }
+
     buildFeatures {
         buildConfig = false
-    }
-    variantFilter { variant ->
-        if (variant.buildType.name == 'debug') {
-            variant.setIgnore(true)
-        }
     }
 }
 
