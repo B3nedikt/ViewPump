@@ -18,7 +18,6 @@ android {
     buildTypes {
         debug {
             matchingFallbacks = ['release']
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -26,19 +25,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    lintOptions {
-        // we don't need to be indexed by firebase and we don't have a custom icon for our sample app
-        disable 'GoogleAppIndexingWarning', 'MissingApplicationIcon'
-        textOutput 'stdout'
-        textReport System.getenv('CI') == 'true'
-    }
 }
 
 dependencies {
     implementation project(':viewpump')
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.4'
 }

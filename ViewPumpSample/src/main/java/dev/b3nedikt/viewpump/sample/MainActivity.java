@@ -1,15 +1,19 @@
 package dev.b3nedikt.viewpump.sample;
 
-import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.ViewPumpAppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import dev.b3nedikt.viewpump.ViewPumpContextWrapper;
+
 import io.github.inflationx.viewpump.sample.R;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private AppCompatDelegate appCompatDelegate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +24,15 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.app_name);
     }
 
-    /*
-        Uncomment if you disable PrivateFactory injection. See ViewPumpConfig#setPrivateFactoryInjectionEnabled(boolean)
-     */
-//    @Override
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public View onCreateView(View parent, String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-//        return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
-//    }
-
+    @NonNull
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+    public AppCompatDelegate getDelegate() {
+        if (appCompatDelegate == null) {
+            appCompatDelegate = new ViewPumpAppCompatDelegate(
+                    super.getDelegate(),
+                    this
+            );
+        }
+        return appCompatDelegate;
     }
 }

@@ -5,6 +5,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import dev.b3nedikt.viewpump.InflateRequest;
 import dev.b3nedikt.viewpump.InflateResult;
 import dev.b3nedikt.viewpump.Interceptor;
@@ -15,18 +18,14 @@ import dev.b3nedikt.viewpump.Interceptor;
  */
 public class CustomTextViewInterceptor implements Interceptor {
 
+    @NotNull
     @Override
     public InflateResult intercept(Chain chain) {
         InflateRequest request = chain.request();
-        View view = inflateView(request.name(), request.context(), request.attrs());
+        View view = inflateView(request.getName(), request.getContext(), request.getAttrs());
 
         if (view != null) {
-            return InflateResult.builder()
-                    .view(view)
-                    .name(view.getClass().getName())
-                    .context(request.context())
-                    .attrs(request.attrs())
-                    .build();
+            return new InflateResult(view, request.getName(), request.getContext(), request.getAttrs());
         } else {
             return chain.proceed(request);
         }

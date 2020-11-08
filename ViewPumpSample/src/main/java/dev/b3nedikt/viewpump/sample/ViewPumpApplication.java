@@ -12,9 +12,7 @@ public class ViewPumpApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ViewPump.init(ViewPump.builder()
-                .addInterceptor(new TextUpdatingInterceptor())
-                .addInterceptor(new CustomTextViewInterceptor())
-                .build());
+
+        ViewPump.init(new TextUpdatingInterceptor(), new CustomTextViewInterceptor());
     }
 }

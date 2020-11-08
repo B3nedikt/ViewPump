@@ -1,17 +1,21 @@
-# ViewPump 3.0.1
+[![Download](https://api.bintray.com/packages/b3nedikt/viewpump/viewpump/images/download.svg?version=4.0.0)](https://bintray.com/b3nedikt/viewpump/viewpump/4.0.0/link)
 
-View inflation you can intercept.
-ViewPump installs a custom LayoutInflater via a ContextThemeWrapper and provides an API of pre/post-inflation interceptors.
+# ViewPump 4.0.0
+
+View inflation you can intercept using an API of pre/post-inflation interceptors.
 
 ## Getting started
 
 ### Dependency
 
-Include the dependency:
+Include the dependencies:
 
 ```groovy
 dependencies {
-    implementation 'dev.b3nedikt.viewpump:viewpump:3.0.1'
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.0'
 }
 ```
 
@@ -41,24 +45,34 @@ Below is an example of a pre-inflation interceptor that returns a CustomTextView
 ```java
 public class CustomTextViewInterceptor implements Interceptor {
 
+  @NotNull
   @Override
   public InflateResult intercept(Chain chain) {
     InflateRequest request = chain.request();
-    if (request.name().endsWith("TextView")) {
-      CustomTextView view = new CustomTextView(
-        request.context(),
-        request.attrs()
+    View view = inflateView(
+      request.getName(),
+      request.getContext(),
+      request.getAttrs()
+    );
+
+    if (view != null) {
+      return new InflateResult(
+        view,
+        request.getName(),
+        request.getContext(),
+        request.getAttrs()
       );
-      return InflateResult
-        .builder()
-        .view(view)
-        .name(view.getClass().getName())
-        .context(request.context())
-        .attrs(request.attrs())
-        .build();
     } else {
       return chain.proceed(request);
     }
+  }
+
+  @Nullable
+  private View inflateView(String name, Context context, AttributeSet attrs) {
+    if ("TextView".equals(name)) {
+      return new CustomTextView(context, attrs);
+    }
+    return null;
   }
 }
 ```
@@ -73,28 +87,38 @@ An interceptor may choose to return a programmatically instantiated view rather 
 @Override
 public void onCreate() {
     super.onCreate();
-    ViewPump.init(ViewPump.builder()
-                .addInterceptor(new TextUpdatingInterceptor())
-                .addInterceptor(new CustomTextViewInterceptor())
-                .build());
+
+    ViewPump.init(new TextUpdatingInterceptor(), new CustomTextViewInterceptor());
     //....
 }
 ```
 
 ### Inject into Context
 
-Wrap the `Activity` Context:
+Add the following to your base activitiy:
 
 ```java
-@Override
-protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+public class MainActivity extends AppCompatActivity {
+
+    private AppCompatDelegate appCompatDelegate = null;
+
+    ...
+
+    @NonNull
+    @Override
+    public AppCompatDelegate getDelegate() {
+        if (appCompatDelegate == null) {
+            appCompatDelegate = new ViewPumpAppCompatDelegate(
+                    super.getDelegate(),
+                    this
+            );
+        }
+        return appCompatDelegate;
+    }
 }
 ```
 
-_You're good to go!_
-
-To see more ideas for potential use cases, check out the [Recipes](https://github.com/InflationX/ViewPump/wiki/Recipes) wiki page.
+For a practical example see my library
 
 ## Collaborators
 
@@ -102,6 +126,8 @@ This library was originally created by:
 
 - [@jbarr21](https://github.com/jbarr21)
 - [@chrisjenx](https://github.com/chrisjenx)
+
+My fork has nearly all the code changed though and has a slightly different API.
 
 ## Licence
 
