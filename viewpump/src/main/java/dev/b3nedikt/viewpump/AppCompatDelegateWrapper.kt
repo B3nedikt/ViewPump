@@ -114,7 +114,7 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
   }
 
   override fun hasWindowFeature(featureId: Int): Boolean {
-    return hasWindowFeature(featureId)
+    return baseDelegate.hasWindowFeature(featureId)
   }
 
   override fun startSupportActionMode(callback: ActionMode.Callback): ActionMode? {
@@ -138,7 +138,7 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
-    return onSaveInstanceState(outState)
+    return baseDelegate.onSaveInstanceState(outState)
   }
 
   override fun applyDayNight(): Boolean {
