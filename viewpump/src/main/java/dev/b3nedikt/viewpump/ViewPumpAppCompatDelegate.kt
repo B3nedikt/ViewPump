@@ -47,7 +47,17 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             context = context,
             attrs = attrs,
             parent = parent,
-            fallbackViewCreator = { super.createView(parent, name, context, attrs) }
+            fallbackViewCreator = {
+              var view = super.createView(parent, name, context, attrs)
+
+              if (view == null) {
+                view = runCatching {
+                  LayoutInflater.from(baseContext).createView(name, null, attrs)
+                }.getOrNull()
+              }
+
+              view
+            }
         )
     ).view
   }

@@ -2,6 +2,8 @@ package dev.b3nedikt.viewpump.sample;
 
 import android.content.res.TypedArray;
 
+import androidx.appcompat.widget.Toolbar;
+
 import org.jetbrains.annotations.NotNull;
 
 import dev.b3nedikt.viewpump.InflateResult;
@@ -37,6 +39,10 @@ public class TextUpdatingInterceptor implements Interceptor {
             } finally {
                 a.recycle();
             }
+        }
+        if(result.getView() instanceof Toolbar) {
+            Toolbar toolbar = (Toolbar) result.getView();
+            toolbar.setTitle("Updated Toolbar Title");
         }
         return result;
     }
