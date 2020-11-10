@@ -86,7 +86,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       LayoutInflater.from(baseContext).createView(context, name, null, attrs)
     } else {
-      LegacyLayoutInflater(LayoutInflater.from(context), context).createViewLegacy(context, name, attrs)
+      LegacyLayoutInflater(context).createViewLegacy(context, name, attrs)
     }
   }
 }
