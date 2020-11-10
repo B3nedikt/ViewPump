@@ -10,12 +10,11 @@ import java.lang.reflect.Field
  * Wrapper around [LayoutInflater] for android versions < Q
  */
 internal class LegacyLayoutInflater(
-    original: LayoutInflater,
     newContext: Context
-) : LayoutInflater(original, newContext) {
+) : LayoutInflater(newContext) {
 
   override fun cloneInContext(newContext: Context): LayoutInflater {
-    return LegacyLayoutInflater(this, newContext)
+    return LegacyLayoutInflater(newContext)
   }
 
   /**
@@ -32,7 +31,12 @@ internal class LegacyLayoutInflater(
       name: String,
       attrs: AttributeSet
   ): View? {
-    CONSTRUCTOR_ARGS_FIELD.set(this, viewContext)
+    @Suppress("UNCHECKED_CAST")
+    val constructorArgsArray = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
+    constructorArgsArray[0] = viewContext
+
+    CONSTRUCTOR_ARGS_FIELD.set(this, constructorArgsArray)
+
     return createView(name, null, attrs)
   }
 
