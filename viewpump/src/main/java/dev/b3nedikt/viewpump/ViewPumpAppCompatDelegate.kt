@@ -3,6 +3,7 @@
 package androidx.appcompat.app
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
 import dev.b3nedikt.viewpump.ViewPump
 import dev.b3nedikt.viewpump.internal.InterceptorChain
+import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
 
 /**
  * A [AppCompatDelegate] to be used with [ViewPump]
@@ -52,7 +54,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
               if (view == null) {
                 view = runCatching {
-                  LayoutInflater.from(baseContext).createView(name, null, attrs)
+                  createViewCompat(context, name, attrs)
                 }.getOrNull()
               }
 
@@ -71,7 +73,20 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
   }
 
   private fun inflate(originalRequest: InflateRequest): InflateResult {
-    val chain = InterceptorChain(ViewPump.interceptors ?: emptyList(), 0, originalRequest)
+    val chain = InterceptorChain(
+        interceptors = ViewPump.interceptors ?: emptyList(),
+        index = 0,
+        request = originalRequest
+    )
+
     return chain.proceed(originalRequest)
+  }
+
+  private fun createViewCompat(context: Context, name: String, attrs: AttributeSet): View? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      LayoutInflater.from(baseContext).createView(context, name, null, attrs)
+    } else {
+      LegacyLayoutInflater(LayoutInflater.from(context), context).createViewLegacy(context, name, attrs)
+    }
   }
 }
