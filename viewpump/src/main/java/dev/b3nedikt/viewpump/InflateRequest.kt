@@ -15,9 +15,9 @@ import android.view.View
  * if the result of this request does not create a view
  */
 data class InflateRequest(
-    val name: String,
-    val context: Context,
-    val attrs: AttributeSet? = null,
-    val parent: View? = null,
-    val fallbackViewCreator: () -> View?
+        val name: String,
+        val context: Context,
+        val attrs: AttributeSet? = null,
+        val parent: View? = null,
+        val fallbackViewCreator: () -> View?
 )

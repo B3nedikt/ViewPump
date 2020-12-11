@@ -13,8 +13,8 @@ import android.view.View
  * @param attrs Inflation attributes as specified in XML file.
  */
 data class InflateResult(
-    val view: View? = null,
-    val name: String,
-    val context: Context,
-    val attrs: AttributeSet? = null
+        val view: View? = null,
+        val name: String,
+        val context: Context,
+        val attrs: AttributeSet? = null
 )

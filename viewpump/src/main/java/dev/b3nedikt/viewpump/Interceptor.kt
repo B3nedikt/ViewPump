@@ -7,11 +7,11 @@ package dev.b3nedikt.viewpump
  * on a view after it is inflated based on its Context or AttributeSet.
  */
 interface Interceptor {
-  fun intercept(chain: Chain): InflateResult
+    fun intercept(chain: Chain): InflateResult
 
-  interface Chain {
-    fun request(): InflateRequest
+    interface Chain {
+        fun request(): InflateRequest
 
-    fun proceed(request: InflateRequest): InflateResult
-  }
+        fun proceed(request: InflateRequest): InflateResult
+    }
 }
