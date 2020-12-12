@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.WebView
 import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
@@ -25,9 +26,9 @@ import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
  * @param wrapContext optional function to wrap the [Context] after it has been attached
  */
 class ViewPumpAppCompatDelegate @JvmOverloads constructor(
-        baseDelegate: AppCompatDelegate,
+        private val baseDelegate: AppCompatDelegate,
         private val baseContext: Context,
-        wrapContext: ((baseContext: Context) -> Context)? = null
+        private val wrapContext: ((baseContext: Context) -> Context)? = null
 ) : AppCompatDelegateWrapper(baseDelegate, wrapContext), LayoutInflater.Factory2 {
 
     override fun installViewFactory() {
@@ -58,6 +59,12 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                                 }.getOrNull()
                             }
 
+                            // WebViews cannot deal with custom resources, so we need to make
+                            // sure we use the unwrapped context here.
+                            if (name == "WebView") {
+                                view = WebView(baseDelegate.attachBaseContext2(context), attrs)
+                            }
+
                             view
                         }
                 )
@@ -84,7 +91,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
     private fun createViewCompat(context: Context, name: String, attrs: AttributeSet): View? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            LayoutInflater.from(baseContext).createView(context, name, null, attrs)
+            LayoutInflater.from(context).createView(context, name, null, attrs)
         } else {
             LegacyLayoutInflater(context).createViewLegacy(context, name, attrs)
         }
