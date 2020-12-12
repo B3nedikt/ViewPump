@@ -1,6 +1,6 @@
-[![Download](https://api.bintray.com/packages/b3nedikt/viewpump/viewpump/images/download.svg?version=4.0.3)](https://bintray.com/b3nedikt/viewpump/viewpump/4.0.3/link)
+[![Download](https://api.bintray.com/packages/b3nedikt/viewpump/viewpump/images/download.svg?version=4.0.4)](https://bintray.com/b3nedikt/viewpump/viewpump/4.0.4/link)
 
-# ViewPump 4.0.3
+# ViewPump 4.0.4
 
 View inflation you can intercept using an API of pre/post-inflation interceptors.
 
@@ -15,7 +15,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.3'
+    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.4'
 }
 ```
 
