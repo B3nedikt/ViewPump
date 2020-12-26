@@ -51,7 +51,15 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         attrs = attrs,
                         parent = parent,
                         fallbackViewCreator = {
-                            var view = super.createView(parent, name, context, attrs)
+                            var view = runCatching { super.createView(parent, name, context, attrs) }
+                                    .getOrElse {
+
+                                        // We only arrive here if the context passed into this
+                                        // method does not have a theme. This does only occur for
+                                        // views which are part of alert dialogs displayed when
+                                        // interacting with web views on API 22 and below.
+                                        super.createView(parent, name, baseContext, attrs)
+                                    }
 
                             if (view == null) {
                                 view = runCatching {
