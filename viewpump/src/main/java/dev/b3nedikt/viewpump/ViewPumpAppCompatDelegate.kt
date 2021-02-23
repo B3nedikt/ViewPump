@@ -101,7 +101,12 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             LayoutInflater.from(context).createView(context, name, null, attrs)
         } else {
-            LegacyLayoutInflater(context).createViewLegacy(context, name, attrs)
+
+            // The old inflater can´t handle ViewStubs
+            if (name != "ViewStub") {
+                return LegacyLayoutInflater(context).createViewLegacy(context, name, attrs)
+            }
+            return null
         }
     }
 }
