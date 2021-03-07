@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
+import android.widget.SearchView
 import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
@@ -71,6 +72,12 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                             // sure we use the unwrapped context here.
                             if (name == "WebView") {
                                 view = WebView(baseDelegate.attachBaseContext2(context), attrs)
+                            }
+
+                            // The framework SearchView needs to be inflated manually,
+                            // as it is not inflated by the AppCompatViewInflater
+                            if (name == "SearchView") {
+                                view = SearchView(context, attrs)
                             }
 
                             view
