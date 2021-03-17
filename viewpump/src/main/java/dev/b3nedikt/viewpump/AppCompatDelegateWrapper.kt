@@ -40,7 +40,7 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         baseDelegate.onCreate(savedInstanceState)
-        removeActivityDelegate(baseDelegate)
+        removeActiveDelegate(baseDelegate)
         addActiveDelegate(this)
     }
 
@@ -102,7 +102,7 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
 
     override fun onDestroy() {
         baseDelegate.onDestroy()
-        removeActivityDelegate(this)
+        removeActiveDelegate(this)
     }
 
     override fun getDrawerToggleDelegate(): ActionBarDrawerToggle.Delegate? {
