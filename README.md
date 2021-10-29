@@ -1,4 +1,4 @@
-[![Download](https://api.bintray.com/packages/b3nedikt/viewpump/viewpump/images/download.svg?version=4.0.7)](https://bintray.com/b3nedikt/viewpump/viewpump/4.0.7/link)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump)
 
 # ViewPump 4.0.7
 
