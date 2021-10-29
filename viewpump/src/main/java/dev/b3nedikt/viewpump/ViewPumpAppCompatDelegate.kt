@@ -74,6 +74,10 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                                 view = WebView(baseDelegate.attachBaseContext2(context), attrs)
                             }
 
+                            if (view is WebView && name != "WebView") {
+                                view = createCustomWebView(view, context, attrs)
+                            }
+
                             // The framework SearchView needs to be inflated manually,
                             // as it is not inflated by the AppCompatViewInflater
                             if (name == "SearchView") {
@@ -115,5 +119,14 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             }
             return null
         }
+    }
+
+    private fun createCustomWebView(
+        view: WebView,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
+        return view.javaClass.constructors[1]
+            .newInstance(baseDelegate.attachBaseContext2(context), attrs) as View?
     }
 }
