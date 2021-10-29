@@ -1,5 +1,6 @@
 package dev.b3nedikt.viewpump.internal
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -9,8 +10,9 @@ import java.lang.reflect.Field
 /**
  * Wrapper around [LayoutInflater] for android versions < Q
  */
+@SuppressLint("SoonBlockedPrivateApi")
 internal class LegacyLayoutInflater(
-        newContext: Context
+    newContext: Context
 ) : LayoutInflater(newContext) {
 
     override fun cloneInContext(newContext: Context): LayoutInflater {
@@ -27,9 +29,9 @@ internal class LegacyLayoutInflater(
      * @param attrs Inflation attributes as specified in XML file.
      */
     fun createViewLegacy(
-            viewContext: Context,
-            name: String,
-            attrs: AttributeSet
+        viewContext: Context,
+        name: String,
+        attrs: AttributeSet
     ): View? {
         @Suppress("UNCHECKED_CAST")
         val constructorArgsArray = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
@@ -41,6 +43,7 @@ internal class LegacyLayoutInflater(
     }
 
     private companion object {
+
         private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
             requireNotNull(LayoutInflater::class.java.getDeclaredField("mConstructorArgs")) {
                 "No constructor arguments field found in LayoutInflater!"
