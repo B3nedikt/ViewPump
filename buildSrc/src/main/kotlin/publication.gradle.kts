@@ -1,4 +1,5 @@
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.kotlin.gradle.utils.toSetOrEmpty
 import java.net.URI
 import java.util.*
 
@@ -10,7 +11,7 @@ plugins {
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
-    from(android.sourceSets.getByName("main").kotlin.srcDirs())
+    from(android.sourceSets.getByName("main").java.srcDirs)
 }
 
 val javadocJar by tasks.registering(Jar::class) {
