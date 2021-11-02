@@ -27,9 +27,9 @@ import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
  * @param wrapContext optional function to wrap the [Context] after it has been attached
  */
 class ViewPumpAppCompatDelegate @JvmOverloads constructor(
-        private val baseDelegate: AppCompatDelegate,
-        private val baseContext: Context,
-        private val wrapContext: ((baseContext: Context) -> Context)? = null
+    private val baseDelegate: AppCompatDelegate,
+    private val baseContext: Context,
+    private val wrapContext: ((baseContext: Context) -> Context)? = null
 ) : AppCompatDelegateWrapper(baseDelegate, wrapContext), LayoutInflater.Factory2 {
 
     override fun installViewFactory() {
@@ -38,59 +38,71 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             LayoutInflaterCompat.setFactory2(layoutInflater, this)
         } else {
             if (layoutInflater.factory2 !is AppCompatDelegateImpl) {
-                Log.i(TAG, "The Activity's LayoutInflater already has a Factory installed"
-                        + " so we can not install ViewPump's")
+                Log.i(
+                    TAG, "The Activity's LayoutInflater already has a Factory installed"
+                            + " so we can not install ViewPump's"
+                )
             }
         }
     }
 
-    override fun createView(parent: View?, name: String, context: Context, attrs: AttributeSet): View? {
+    override fun createView(
+        parent: View?,
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
         return inflate(
-                InflateRequest(
-                        name = name,
-                        context = context,
-                        attrs = attrs,
-                        parent = parent,
-                        fallbackViewCreator = {
-                            var view = runCatching { super.createView(parent, name, context, attrs) }
-                                    .getOrElse {
+            InflateRequest(
+                name = name,
+                context = context,
+                attrs = attrs,
+                parent = parent,
+                fallbackViewCreator = {
+                    var view = runCatching { super.createView(parent, name, context, attrs) }
+                        .getOrElse {
 
-                                        // We only arrive here if the context passed into this
-                                        // method does not have a theme. This does only occur for
-                                        // views which are part of alert dialogs displayed when
-                                        // interacting with web views on API 22 and below.
-                                        super.createView(parent, name, baseContext, attrs)
-                                    }
-
-                            if (view == null) {
-                                view = runCatching {
-                                    createViewCompat(context, name, attrs)
-                                }.getOrNull()
-                            }
-
-                            // WebViews cannot deal with custom resources, so we need to make
-                            // sure we use the unwrapped context here.
-                            if (name == "WebView") {
-                                view = WebView(baseDelegate.attachBaseContext2(context), attrs)
-                            }
-
-                            if (view is WebView && name != "WebView") {
-                                view = createCustomWebView(view, context, attrs)
-                            }
-
-                            // The framework SearchView needs to be inflated manually,
-                            // as it is not inflated by the AppCompatViewInflater
-                            if (name == "SearchView") {
-                                view = SearchView(context, attrs)
-                            }
-
-                            view
+                            // We only arrive here if the context passed into this
+                            // method does not have a theme. This does only occur for
+                            // views which are part of alert dialogs displayed when
+                            // interacting with web views on API 22 and below.
+                            super.createView(parent, name, baseContext, attrs)
                         }
-                )
+
+                    if (view == null) {
+                        view = runCatching {
+                            createViewCompat(context, name, attrs)
+                        }.getOrNull()
+                    }
+
+                    // WebViews cannot deal with custom resources, so we need to make
+                    // sure we use the unwrapped context here.
+                    if (name == "WebView") {
+                        view = WebView(baseDelegate.attachBaseContext2(context), attrs)
+                    }
+
+                    if (view is WebView && name != "WebView") {
+                        view = createCustomWebView(view, context, attrs)
+                    }
+
+                    // The framework SearchView needs to be inflated manually,
+                    // as it is not inflated by the AppCompatViewInflater
+                    if (name == "SearchView") {
+                        view = SearchView(context, attrs)
+                    }
+
+                    view
+                }
+            )
         ).view
     }
 
-    override fun onCreateView(parent: View?, name: String, context: Context, attrs: AttributeSet): View? {
+    override fun onCreateView(
+        parent: View?,
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
         return createView(parent, name, context, attrs)
     }
 
@@ -100,9 +112,9 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
     private fun inflate(originalRequest: InflateRequest): InflateResult {
         val chain = InterceptorChain(
-                interceptors = ViewPump.interceptors ?: emptyList(),
-                index = 0,
-                request = originalRequest
+            interceptors = ViewPump.interceptors ?: emptyList(),
+            index = 0,
+            request = originalRequest
         )
 
         return chain.proceed(originalRequest)
@@ -126,7 +138,16 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet
     ): View? {
-        return view.javaClass.constructors[1]
-            .newInstance(baseDelegate.attachBaseContext2(context), attrs) as View?
+
+        return view.javaClass.constructors
+            .find {
+                it.parameterTypes.size == 2 &&
+                        it.parameterTypes[0] == Context::class.java &&
+                        it.parameterTypes[1] == AttributeSet::class.java
+            }
+            ?.newInstance(
+                baseDelegate.attachBaseContext2(context),
+                attrs
+            ) as View?
     }
 }
