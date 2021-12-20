@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
+import dev.b3nedikt.viewpump.WrapContext
 
 /**
  * A [AppCompatDelegate] which delegates all calls to it to its [baseDelegate]. Can be subclassed
@@ -22,8 +23,8 @@ import androidx.appcompat.widget.Toolbar
  * @param wrapContext a function to wrap the context after [AppCompatDelegate.attachBaseContext2].
  */
 open class AppCompatDelegateWrapper @JvmOverloads constructor(
-        private val baseDelegate: AppCompatDelegate,
-        private val wrapContext: ((baseContext: Context) -> Context)? = null
+    private val baseDelegate: AppCompatDelegate,
+    private val wrapContext: WrapContext? = null
 ) : AppCompatDelegate() {
 
     override fun getSupportActionBar(): ActionBar? {
@@ -155,6 +156,6 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
     }
 
     private fun wrap(context: Context): Context {
-        return wrapContext?.invoke(context) ?: context
+        return wrapContext?.perform(context) ?: context
     }
 }
