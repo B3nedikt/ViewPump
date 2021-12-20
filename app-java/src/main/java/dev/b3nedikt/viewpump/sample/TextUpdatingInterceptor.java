@@ -2,13 +2,11 @@ package dev.b3nedikt.viewpump.sample;
 
 import android.content.res.TypedArray;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-
-import org.jetbrains.annotations.NotNull;
 
 import dev.b3nedikt.viewpump.InflateResult;
 import dev.b3nedikt.viewpump.Interceptor;
-import io.github.inflationx.viewpump.sample.R;
 
 /**
  * This is an example of a post-inflation interceptor that modifies the properties of a view
@@ -17,7 +15,7 @@ import io.github.inflationx.viewpump.sample.R;
  */
 public class TextUpdatingInterceptor implements Interceptor {
 
-    @NotNull
+    @NonNull
     @Override
     public InflateResult intercept(Chain chain) {
         InflateResult result = chain.proceed(chain.request());

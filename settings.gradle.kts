@@ -1,2 +1,1 @@
-include(":viewpump", ":ViewPumpSample")
-
+include(":viewpump", ":app", ":app-java")
