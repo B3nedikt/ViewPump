@@ -16,8 +16,8 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        debug {
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
@@ -26,4 +26,6 @@ android {
 dependencies {
     implementation(project(":viewpump"))
     implementation(Dependencies.appCompat)
+    implementation(Dependencies.kotlin)
+    implementation(Dependencies.applocale)
 }
