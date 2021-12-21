@@ -1,6 +1,6 @@
 object Dependencies {
 
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
 
     const val appCompat = "androidx.appcompat:appcompat:1.4.0"
 
