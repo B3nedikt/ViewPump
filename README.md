@@ -13,7 +13,7 @@ Include the dependencies:
 ```groovy
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
 
     implementation 'dev.b3nedikt.viewpump:viewpump:4.0.10'
 }
