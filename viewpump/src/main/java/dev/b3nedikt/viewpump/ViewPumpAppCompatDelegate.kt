@@ -14,6 +14,7 @@ import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
 import dev.b3nedikt.viewpump.ViewPump
+import dev.b3nedikt.viewpump.WebViewContextWrapper
 import dev.b3nedikt.viewpump.WrapContext
 import dev.b3nedikt.viewpump.internal.InterceptorChain
 import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
@@ -79,7 +80,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                     // WebViews cannot deal with custom resources, so we need to make
                     // sure we use the unwrapped context here.
                     if (name == "WebView") {
-                        view = WebView(baseDelegate.attachBaseContext2(context), attrs)
+                        view = WebView(createWebViewContext(context), attrs)
                     }
 
                     if (view is WebView && name != "WebView") {
@@ -147,8 +148,11 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         it.parameterTypes[1] == AttributeSet::class.java
             }
             ?.newInstance(
-                baseDelegate.attachBaseContext2(context),
+                createWebViewContext(context),
                 attrs
             ) as View?
     }
+
+    private fun createWebViewContext(context: Context) =
+        super.attachBaseContext2(WebViewContextWrapper(context))
 }
