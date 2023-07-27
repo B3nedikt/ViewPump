@@ -2,6 +2,7 @@
 
 package androidx.appcompat.app
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -10,6 +11,7 @@ import android.util.AttributeSet
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.window.OnBackInvokedDispatcher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -87,6 +89,30 @@ open class AppCompatDelegateWrapper @JvmOverloads constructor(
 
     override fun addContentView(v: View?, lp: ViewGroup.LayoutParams?) {
         baseDelegate.addContentView(v, lp)
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    override fun attachBaseContext(context: Context?) {
+        baseDelegate.attachBaseContext(context)
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun setOnBackInvokedDispatcher(dispatcher: OnBackInvokedDispatcher?) {
+        baseDelegate.setOnBackInvokedDispatcher(dispatcher)
+    }
+
+    override fun applyAppLocales(): Boolean {
+        return baseDelegate.applyAppLocales()
+    }
+
+    override fun getContextForDelegate(): Context? {
+        return baseDelegate.contextForDelegate
+    }
+
+    override fun asyncExecuteSyncRequestedAndStoredLocales(context: Context?) {
+        baseDelegate.asyncExecuteSyncRequestedAndStoredLocales(context)
     }
 
     override fun attachBaseContext2(context: Context): Context {
