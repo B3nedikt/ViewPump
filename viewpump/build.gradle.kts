@@ -18,6 +18,12 @@ android {
         buildConfig = false
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
