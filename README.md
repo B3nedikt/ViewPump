@@ -1,6 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump)
 
-# ViewPump 4.0.10
+# ViewPump 4.0.11
 
 View inflation you can intercept using an API of pre/post-inflation interceptors.
 
@@ -15,7 +15,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
-    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.10'
+    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.11'
 }
 ```
 
