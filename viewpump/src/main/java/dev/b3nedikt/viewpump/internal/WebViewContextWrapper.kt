@@ -1,4 +1,4 @@
-package dev.b3nedikt.viewpump
+package dev.b3nedikt.viewpump.internal
 
 import android.content.Context
 import android.content.ContextWrapper

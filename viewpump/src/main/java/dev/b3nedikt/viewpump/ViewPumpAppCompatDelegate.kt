@@ -14,7 +14,7 @@ import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
 import dev.b3nedikt.viewpump.ViewPump
-import dev.b3nedikt.viewpump.WebViewContextWrapper
+import dev.b3nedikt.viewpump.internal.WebViewContextWrapper
 import dev.b3nedikt.viewpump.WrapContext
 import dev.b3nedikt.viewpump.internal.InterceptorChain
 import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
