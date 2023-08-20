@@ -2,6 +2,7 @@
 
 package androidx.appcompat.app
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -10,6 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
 import android.widget.SearchView
+import androidx.appcompat.widget.AlertDialogLayout
+import androidx.appcompat.widget.ButtonBarLayout
+import androidx.appcompat.widget.DialogTitle
 import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
@@ -87,6 +91,13 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         view = createCustomWebView(view, context, attrs)
                     }
 
+                    // On Android P normally inflated dialog views crash when used in dialogs
+                    // opened from web views, we therefor replace them with their newer versions
+                    // from androidx
+                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+                        view = createDialogWidgetView(name, view, attrs)
+                    }
+
                     // The framework SearchView needs to be inflated manually,
                     // as it is not inflated by the AppCompatViewInflater
                     if (name == "SearchView") {
@@ -155,4 +166,27 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
     private fun createWebViewContext(context: Context) =
         super.attachBaseContext2(WebViewContextWrapper(context))
+
+    @SuppressLint("RestrictedApi")
+    private fun createDialogWidgetView(
+        name: String,
+        view: View?,
+        attrs: AttributeSet
+    ): View? {
+
+        val wrappedContext = baseDelegate.attachBaseContext2(baseContext)
+
+        return when (name) {
+            "com.android.internal.widget.AlertDialogLayout" ->
+                AlertDialogLayout(wrappedContext, attrs)
+
+            "com.android.internal.widget.DialogTitle" ->
+                DialogTitle(wrappedContext, attrs)
+
+            "com.android.internal.widget.ButtonBarLayout" ->
+                ButtonBarLayout(wrappedContext, attrs)
+
+            else -> view
+        }
+    }
 }
