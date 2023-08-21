@@ -174,19 +174,19 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
         attrs: AttributeSet
     ): View? {
 
-        val wrappedContext = baseDelegate.attachBaseContext2(baseContext)
-
         return when (name) {
             "com.android.internal.widget.AlertDialogLayout" ->
-                AlertDialogLayout(wrappedContext, attrs)
+                AlertDialogLayout(createWrappedContext(), attrs)
 
             "com.android.internal.widget.DialogTitle" ->
-                DialogTitle(wrappedContext, attrs)
+                DialogTitle(createWrappedContext(), attrs)
 
             "com.android.internal.widget.ButtonBarLayout" ->
-                ButtonBarLayout(wrappedContext, attrs)
+                ButtonBarLayout(createWrappedContext(), attrs)
 
             else -> view
         }
     }
+
+    private fun createWrappedContext() = baseDelegate.attachBaseContext2(baseContext)
 }
