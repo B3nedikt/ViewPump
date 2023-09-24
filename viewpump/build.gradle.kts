@@ -18,6 +18,15 @@ android {
         buildConfig = false
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -33,6 +42,8 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.kotlin)
-    implementation(Dependencies.appCompat)
+    implementation(platform(libs.kotlin.bom))
+
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.appCompat)
 }
