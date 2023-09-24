@@ -1,0 +1,29 @@
+[versions]
+
+kotlin = "1.9.10"
+agp = "8.1.1"
+dokka = "1.8.20"
+
+appCompat = "1.6.1"
+
+appLocale = "3.1.0"
+
+[libraries]
+
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+
+agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+
+appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+
+appLocale = { module= "dev.b3nedikt.applocale:applocale" , version.ref = "appLocale" }
+
+[plugins]
+
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
