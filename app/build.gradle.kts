@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
@@ -37,4 +37,15 @@ dependencies {
     implementation(libs.appCompat)
 
     implementation(libs.appLocale)
+
+    // Testing
+    testImplementation(libs.junit)
+    //testImplementation(libs.junit.ktx)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.monitor)
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.web)
 }
