@@ -10,6 +10,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
+import android.widget.CalendarView
+import android.widget.DatePicker
+import android.widget.NumberPicker
 import android.widget.SearchView
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.appcompat.widget.ButtonBarLayout
@@ -18,10 +21,10 @@ import androidx.core.view.LayoutInflaterCompat
 import dev.b3nedikt.viewpump.InflateRequest
 import dev.b3nedikt.viewpump.InflateResult
 import dev.b3nedikt.viewpump.ViewPump
-import dev.b3nedikt.viewpump.internal.WebViewContextWrapper
 import dev.b3nedikt.viewpump.WrapContext
 import dev.b3nedikt.viewpump.internal.InterceptorChain
 import dev.b3nedikt.viewpump.internal.LegacyLayoutInflater
+import dev.b3nedikt.viewpump.internal.WebViewContextWrapper
 
 /**
  * A [AppCompatDelegate] to be used with [ViewPump]
@@ -43,6 +46,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
         if (layoutInflater.factory == null) {
             LayoutInflaterCompat.setFactory2(layoutInflater, this)
         } else {
+            @SuppressLint("RestrictedApi")
             if (layoutInflater.factory2 !is AppCompatDelegateImpl) {
                 Log.i(
                     TAG, "The Activity's LayoutInflater already has a Factory installed"
@@ -183,6 +187,17 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
             "com.android.internal.widget.ButtonBarLayout" ->
                 ButtonBarLayout(createWrappedContext(), attrs)
+
+            // The following three widgets only exist on Samsung devices with android 9,
+            // we replace them with their counterparts from android.widgets
+            "com.android.internal.widget.CalendarView" ->
+                CalendarView(createWrappedContext(), attrs)
+
+            "com.android.internal.widget.DatePicker" ->
+                DatePicker(createWrappedContext(), attrs)
+
+            "com.android.internal.widget.NumberPicker" ->
+                NumberPicker(createWrappedContext(), attrs)
 
             else -> view
         }
