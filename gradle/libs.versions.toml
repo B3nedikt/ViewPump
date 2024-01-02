@@ -1,8 +1,8 @@
 [versions]
 
-kotlin = "1.9.10"
-agp = "8.1.1"
-dokka = "1.9.0"
+kotlin = "1.9.22"
+agp = "8.2.0"
+dokka = "1.9.10"
 
 appCompat = "1.6.1"
 
