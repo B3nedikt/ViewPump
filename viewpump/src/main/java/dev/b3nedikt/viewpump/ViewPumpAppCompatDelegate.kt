@@ -188,15 +188,15 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             "com.android.internal.widget.ButtonBarLayout" ->
                 ButtonBarLayout(createWrappedContext(), attrs)
 
-            // The following three widgets only exist on Samsung devices with android 9,
-            // we replace them with their counterparts from android.widgets
-            "com.android.internal.widget.CalendarView" ->
+            // The following three widgets are created incorrectly on Samsung devices with android 9,
+            // we therefor create them manually
+            "CalendarView" ->
                 CalendarView(createWrappedContext(), attrs)
 
-            "com.android.internal.widget.DatePicker" ->
+            "DatePicker" ->
                 DatePicker(createWrappedContext(), attrs)
 
-            "com.android.internal.widget.NumberPicker" ->
+            "NumberPicker" ->
                 NumberPicker(createWrappedContext(), attrs)
 
             else -> view
