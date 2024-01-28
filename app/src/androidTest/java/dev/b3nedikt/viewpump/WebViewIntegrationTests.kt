@@ -18,11 +18,28 @@ class WebViewIntegrationTests {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun test() {
+    fun testNumberPicker() {
         onWebView()
             .forceJavascriptEnabled()
-            .withElement(findElement(Locator.ID, "quantity"))
+            .withElement(findElement(Locator.ID, "numberPicker"))
             .perform(webClick())
 
+    }
+
+    @Test
+    fun testDatePicker() {
+        onWebView()
+            .forceJavascriptEnabled()
+            .withElement(findElement(Locator.ID, "datePicker"))
+            .perform(webClick())
+
+    }
+
+    @Test
+    fun testAlertDialog() {
+        onWebView()
+            .forceJavascriptEnabled()
+            .withElement(findElement(Locator.ID, "alertDialog"))
+            .perform(webClick())
     }
 }

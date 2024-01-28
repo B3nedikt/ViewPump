@@ -49,18 +49,55 @@ class MainActivity : AppCompatActivity() {
                 <html>
                 <body>
 
-                <h1>Display a Number Field</h1>
+                    <h1>HTML which shows native views</h1>
 
-                <form action="/action_page.php">
-                  <label for="quantity">Quantity (between 1 and 5):</label>
-                  <input type="number" id="quantity" name="quantity" min="1" max="5">
-                  <br>
-                  <label for="start">Start date:</label>
-                  <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
-                  <br>
-                  <input type="submit">
-                </form>
+                    <form action="/action_page.php">
+                        <label for="quantity">Number Picker:</label>
+                        <input type="number" id="numberPicker" name="quantity">
+                        <br>
+                        <label for="start">Date Picker</label>
+                        <input type="date" id="datePicker" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
+                        <br>
+                        <button id="alertDialog">Alert Dialog</button>
 
+                        <dialog id="favDialog">
+                            <form method="dialog">
+                                <section>
+                                    <p><label for="favAnimal">Favorite animal:</label>
+                                        <select id="favAnimal">
+                                            <option>Brine shrimp</option>
+                                            <option>Red panda</option>
+                                            <option>Spider monkey</option>
+                                        </select>
+                                    </p>
+                                </section>
+                                <menu>
+                                    <button id="cancel" type="reset">Cancel</button>
+                                    <button type="submit">Confirm</button>
+                                </menu>
+                            </form>
+                        </dialog>
+
+                        <script>
+                            (function () {
+                                var updateButton = document.getElementById('alertDialog');
+                                var cancelButton = document.getElementById('cancel');
+                                var favDialog = document.getElementById('favDialog');
+
+                                // Update button opens a modal dialog
+                                updateButton.addEventListener('click', function () {
+                                    favDialog.showModal();
+                                });
+
+                                // Form cancel button closes the dialog box
+                                cancelButton.addEventListener('click', function () {
+                                    favDialog.close();
+                                });
+
+                            })();
+                        </script>
+
+                    </form>
                 </body>
                 </html>
             """.trimIndent()
