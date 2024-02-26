@@ -14,6 +14,7 @@ import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.NumberPicker
 import android.widget.SearchView
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.appcompat.widget.ButtonBarLayout
 import androidx.appcompat.widget.DialogTitle
@@ -99,7 +100,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                     // opened from web views, we therefor replace them with their newer versions
                     // from androidx
                     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-                        view = createDialogWidgetView(name, view, attrs)
+                        view = createDialogWidgetView(context, name, view, attrs)
                     }
 
                     // The framework SearchView needs to be inflated manually,
@@ -173,6 +174,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
     @SuppressLint("RestrictedApi")
     private fun createDialogWidgetView(
+        context: Context,
         name: String,
         view: View?,
         attrs: AttributeSet
@@ -191,13 +193,13 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             // The following three widgets only exist on Samsung devices with android 9,
             // we replace them with their counterparts from android.widgets
             "CalendarView" ->
-                CalendarView(createWrappedContext(), attrs)
+                CalendarView(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
 
             "DatePicker" ->
-                DatePicker(createWrappedContext(), attrs)
+                DatePicker(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
 
             "NumberPicker" ->
-                NumberPicker(createWrappedContext(), attrs)
+                NumberPicker(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
 
             else -> view
         }
