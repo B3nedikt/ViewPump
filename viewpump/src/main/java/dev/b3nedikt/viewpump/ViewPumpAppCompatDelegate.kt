@@ -42,6 +42,8 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
     private val wrapContext: WrapContext? = null
 ) : AppCompatDelegateWrapper(baseDelegate, wrapContext), LayoutInflater.Factory2 {
 
+    private var webViewContext: Context? = null
+
     override fun installViewFactory() {
         val layoutInflater = LayoutInflater.from(baseContext)
         if (layoutInflater.factory == null) {
@@ -96,12 +98,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         view = createCustomWebView(view, context, attrs)
                     }
 
-                    // On Android P normally inflated dialog views crash when used in dialogs
-                    // opened from web views, we therefor replace them with their newer versions
-                    // from androidx
-                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-                        view = createDialogWidgetView(context, name, view, attrs)
-                    }
+                    view = createDialogWidgetView(context, name, view, attrs)
 
                     // The framework SearchView needs to be inflated manually,
                     // as it is not inflated by the AppCompatViewInflater
@@ -169,8 +166,10 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
             ) as View?
     }
 
-    private fun createWebViewContext(context: Context) =
-        super.attachBaseContext2(WebViewContextWrapper(context))
+    private fun createWebViewContext(context: Context): Context {
+        webViewContext = super.attachBaseContext2(WebViewContextWrapper(context))
+        return webViewContext!!
+    }
 
     @SuppressLint("RestrictedApi")
     private fun createDialogWidgetView(
@@ -182,24 +181,24 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
         return when (name) {
             "com.android.internal.widget.AlertDialogLayout" ->
-                AlertDialogLayout(createWrappedContext(), attrs)
+                AlertDialogLayout(webViewContext!!, attrs)
 
             "com.android.internal.widget.DialogTitle" ->
-                DialogTitle(createWrappedContext(), attrs)
+                DialogTitle(webViewContext!!, attrs)
 
             "com.android.internal.widget.ButtonBarLayout" ->
-                ButtonBarLayout(createWrappedContext(), attrs)
+                ButtonBarLayout(webViewContext!!, attrs)
 
             // The following three widgets only exist on Samsung devices with android 9,
             // we replace them with their counterparts from android.widgets
             "CalendarView" ->
-                CalendarView(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
+                CalendarView(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
 
             "DatePicker" ->
-                DatePicker(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
+                DatePicker(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
 
             "NumberPicker" ->
-                NumberPicker(ContextThemeWrapper(createWrappedContext(), context.theme), attrs)
+                NumberPicker(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
 
             else -> view
         }
