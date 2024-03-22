@@ -91,7 +91,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                     // WebViews cannot deal with custom resources, so we need to make
                     // sure we use the unwrapped context here.
                     if (name == "WebView") {
-                        view = WebView(createWebViewContext(context), attrs)
+                        view = WebView(getWrappedContext(context), attrs)
                     }
 
                     if (view is WebView && name != "WebView") {
@@ -161,14 +161,9 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         it.parameterTypes[1] == AttributeSet::class.java
             }
             ?.newInstance(
-                createWebViewContext(context),
+                getWrappedContext(context),
                 attrs
             ) as View?
-    }
-
-    private fun createWebViewContext(context: Context): Context {
-        webViewContext = super.attachBaseContext2(WebViewContextWrapper(context))
-        return webViewContext!!
     }
 
     @SuppressLint("RestrictedApi")
@@ -181,28 +176,34 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
         return when (name) {
             "com.android.internal.widget.AlertDialogLayout" ->
-                AlertDialogLayout(webViewContext!!, attrs)
+                AlertDialogLayout(getWrappedContext(context), attrs)
 
             "com.android.internal.widget.DialogTitle" ->
-                DialogTitle(webViewContext!!, attrs)
+                DialogTitle(getWrappedContext(context), attrs)
 
             "com.android.internal.widget.ButtonBarLayout" ->
-                ButtonBarLayout(webViewContext!!, attrs)
+                ButtonBarLayout(getWrappedContext(context), attrs)
 
             // The following three widgets only exist on Samsung devices with android 9,
             // we replace them with their counterparts from android.widgets
             "CalendarView" ->
-                CalendarView(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
+                CalendarView(ContextThemeWrapper(getWrappedContext(context), context.theme), attrs)
 
             "DatePicker" ->
-                DatePicker(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
+                DatePicker(ContextThemeWrapper(getWrappedContext(context), context.theme), attrs)
 
             "NumberPicker" ->
-                NumberPicker(ContextThemeWrapper(webViewContext!!, context.theme), attrs)
+                NumberPicker(ContextThemeWrapper(getWrappedContext(context), context.theme), attrs)
 
             else -> view
         }
     }
 
-    private fun createWrappedContext() = baseDelegate.attachBaseContext2(baseContext)
+    private fun getWrappedContext(context: Context): Context {
+        val wrappedContext = webViewContext
+        if (wrappedContext != null) return wrappedContext
+
+        webViewContext = super.attachBaseContext2(WebViewContextWrapper(context))
+        return webViewContext!!
+    }
 }
