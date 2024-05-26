@@ -11,7 +11,6 @@ android {
 
     defaultConfig {
         minSdk = AppConfig.minSdk
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -33,11 +32,6 @@ android {
         }
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
     namespace = "dev.b3nedikt.viewpump"
 }
 

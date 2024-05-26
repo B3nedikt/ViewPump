@@ -23,7 +23,7 @@ internal class InterceptorChain(
         // If we reached the end of the chain, create the view using the fallback
         if (index == interceptors.size) {
             return InflateResult(
-                    view = request.fallbackViewCreator.invoke(),
+                    view = runCatching { request.fallbackViewCreator.invoke() }.getOrNull(),
                     name = request.name,
                     context = request.context,
                     attrs = request.attrs

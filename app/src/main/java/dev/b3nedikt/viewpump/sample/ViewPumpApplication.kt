@@ -15,6 +15,6 @@ class ViewPumpApplication : Application() {
 
         AppLocale.appLocaleRepository = SharedPrefsAppLocaleRepository(this)
 
-        ViewPump.init(TextUpdatingInterceptor(), CustomTextViewInterceptor())
+        ViewPump.init()
     }
 }

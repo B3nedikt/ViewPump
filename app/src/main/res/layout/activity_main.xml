@@ -35,6 +35,11 @@
             android:layout_marginTop="8dp"
             android:text="@string/regular_button" />
 
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
 </merge>

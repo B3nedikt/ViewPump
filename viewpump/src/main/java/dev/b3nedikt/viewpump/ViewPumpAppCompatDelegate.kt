@@ -14,6 +14,7 @@ import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.NumberPicker
 import android.widget.SearchView
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.appcompat.widget.ButtonBarLayout
 import androidx.appcompat.widget.DialogTitle
@@ -40,6 +41,8 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
     private val baseContext: Context,
     private val wrapContext: WrapContext? = null
 ) : AppCompatDelegateWrapper(baseDelegate, wrapContext), LayoutInflater.Factory2 {
+
+    private var webViewContext: Context? = null
 
     override fun installViewFactory() {
         val layoutInflater = LayoutInflater.from(baseContext)
@@ -88,18 +91,15 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                     // WebViews cannot deal with custom resources, so we need to make
                     // sure we use the unwrapped context here.
                     if (name == "WebView") {
-                        view = WebView(createWebViewContext(context), attrs)
+                        view = WebView(getWrappedContext(), attrs)
                     }
 
                     if (view is WebView && name != "WebView") {
                         view = createCustomWebView(view, context, attrs)
                     }
 
-                    // On Android P normally inflated dialog views crash when used in dialogs
-                    // opened from web views, we therefor replace them with their newer versions
-                    // from androidx
-                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-                        view = createDialogWidgetView(name, view, attrs)
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                        view = createDialogWidgetView(context, name, view, attrs)
                     }
 
                     // The framework SearchView needs to be inflated manually,
@@ -163,16 +163,14 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                         it.parameterTypes[1] == AttributeSet::class.java
             }
             ?.newInstance(
-                createWebViewContext(context),
+                getWrappedContext(),
                 attrs
             ) as View?
     }
 
-    private fun createWebViewContext(context: Context) =
-        super.attachBaseContext2(WebViewContextWrapper(context))
-
     @SuppressLint("RestrictedApi")
     private fun createDialogWidgetView(
+        context: Context,
         name: String,
         view: View?,
         attrs: AttributeSet
@@ -180,28 +178,34 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
         return when (name) {
             "com.android.internal.widget.AlertDialogLayout" ->
-                AlertDialogLayout(createWrappedContext(), attrs)
+                AlertDialogLayout(getWrappedContext(), attrs)
 
             "com.android.internal.widget.DialogTitle" ->
-                DialogTitle(createWrappedContext(), attrs)
+                DialogTitle(getWrappedContext(), attrs)
 
             "com.android.internal.widget.ButtonBarLayout" ->
-                ButtonBarLayout(createWrappedContext(), attrs)
+                ButtonBarLayout(getWrappedContext(), attrs)
 
             // The following three widgets only exist on Samsung devices with android 9,
             // we replace them with their counterparts from android.widgets
-            "com.android.internal.widget.CalendarView" ->
-                CalendarView(createWrappedContext(), attrs)
+            "CalendarView" ->
+                CalendarView(ContextThemeWrapper(getWrappedContext(), context.theme), attrs)
 
-            "com.android.internal.widget.DatePicker" ->
-                DatePicker(createWrappedContext(), attrs)
+            "DatePicker" ->
+                DatePicker(ContextThemeWrapper(getWrappedContext(), context.theme), attrs)
 
-            "com.android.internal.widget.NumberPicker" ->
-                NumberPicker(createWrappedContext(), attrs)
+            "NumberPicker" ->
+                NumberPicker(ContextThemeWrapper(getWrappedContext(), context.theme), attrs)
 
             else -> view
         }
     }
 
-    private fun createWrappedContext() = baseDelegate.attachBaseContext2(baseContext)
+    private fun getWrappedContext(): Context {
+        val wrappedContext = webViewContext
+        if (wrappedContext != null) return wrappedContext
+
+        webViewContext = baseDelegate.attachBaseContext2(WebViewContextWrapper(baseContext))
+        return webViewContext!!
+    }
 }
