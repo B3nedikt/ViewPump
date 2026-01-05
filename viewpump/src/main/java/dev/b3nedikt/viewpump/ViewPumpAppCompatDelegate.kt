@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
@@ -99,7 +100,12 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
                     // opened from web views, we therefor replace them with their newer versions
                     // from androidx
                     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-                        view = createDialogWidgetView(name, view, attrs)
+                        view = createDialogWidgetView(
+                            inflationContext = context,
+                            name = name,
+                            view = view,
+                            attrs = attrs
+                        )
                     }
 
                     // The framework SearchView needs to be inflated manually,
@@ -173,31 +179,33 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
 
     @SuppressLint("RestrictedApi")
     private fun createDialogWidgetView(
+        inflationContext: Context,
         name: String,
         view: View?,
         attrs: AttributeSet
     ): View? {
+        val themedSafeContext = ContextThemeWrapper(createWrappedContext(), inflationContext.theme)
 
         return when (name) {
             "com.android.internal.widget.AlertDialogLayout" ->
-                AlertDialogLayout(createWrappedContext(), attrs)
+                AlertDialogLayout(themedSafeContext, attrs)
 
             "com.android.internal.widget.DialogTitle" ->
-                DialogTitle(createWrappedContext(), attrs)
+                DialogTitle(themedSafeContext, attrs)
 
             "com.android.internal.widget.ButtonBarLayout" ->
-                ButtonBarLayout(createWrappedContext(), attrs)
+                ButtonBarLayout(themedSafeContext, attrs)
 
             // The following three widgets only exist on Samsung devices with android 9,
             // we replace them with their counterparts from android.widgets
             "com.android.internal.widget.CalendarView" ->
-                CalendarView(createWrappedContext(), attrs)
+                CalendarView(themedSafeContext, attrs)
 
             "com.android.internal.widget.DatePicker" ->
-                DatePicker(createWrappedContext(), attrs)
+                DatePicker(themedSafeContext, attrs)
 
             "com.android.internal.widget.NumberPicker" ->
-                NumberPicker(createWrappedContext(), attrs)
+                NumberPicker(themedSafeContext, attrs)
 
             else -> view
         }
