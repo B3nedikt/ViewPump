@@ -15,6 +15,7 @@ import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.NumberPicker
 import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.appcompat.widget.ButtonBarLayout
 import androidx.appcompat.widget.DialogTitle
@@ -178,6 +179,7 @@ class ViewPumpAppCompatDelegate @JvmOverloads constructor(
         super.attachBaseContext2(WebViewContextWrapper(context))
 
     @SuppressLint("RestrictedApi")
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun createDialogWidgetView(
         inflationContext: Context,
         name: String,
