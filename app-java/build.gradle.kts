@@ -1,14 +1,14 @@
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
 }
 
 configure<com.android.build.api.dsl.ApplicationExtension> {
-    compileSdk = AppConfig.compileSdk
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "dev.b3nedikt.viewpump.example"
-        minSdk = AppConfig.minSdk
-        targetSdk = AppConfig.targetSdk
+        minSdk = 16
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
