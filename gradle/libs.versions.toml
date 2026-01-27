@@ -1,9 +1,10 @@
 [versions]
 
-kotlin = "1.9.22"
-agp = "8.2.0"
-dokka = "1.9.10"
+kotlin = "2.3.0"
+agp = "9.0.0"
+dokka = "2.1.0"
 
+# Cannot be updated without increasing the min SDK version
 appCompat = "1.6.1"
 
 appLocale = "3.1.0"

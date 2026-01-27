@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
 }
 
-android {
+configure<com.android.build.api.dsl.ApplicationExtension> {
     compileSdk = AppConfig.compileSdk
 
     defaultConfig {
@@ -17,9 +17,15 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     namespace = "dev.b3nedikt.viewpump.sample"
 }
 
