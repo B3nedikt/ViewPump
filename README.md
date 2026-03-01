@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=B3nedikt&project=ViewPump&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.b3nedikt.viewpump/viewpump)
 [![Documentation](https://javadoc.io/badge2/dev.b3nedikt.viewpump/viewpump/javadoc.svg)](https://javadoc.io/doc/dev.b3nedikt.viewpump/viewpump)
 
